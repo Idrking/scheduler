@@ -3,71 +3,45 @@ import "components/Appointment/styles.scss";
 import Header from "components/Appointment/Header";
 import Show from "components/Appointment/Show";
 import Empty from "components/Appointment/Empty";
-
-const appointments = [
-  {
-    id: 1,
-    time: "12pm",
-  },
-  {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  {
-    id: 3,
-    time: "2pm"
-  },
-  {
-    id: 4,
-    time: "3pm",
-    interview: {
-      student: "Jerry Bemson",
-      interviewer: {
-        id: 2,
-        name: "Jimmy Mentiljin",
-        avatar: "https://i.imgur.com/Nmx0Qxo.png"
-      }
-    }
-  },
-  {
-    id: 5,
-    time: "11am",
-    interview: {
-      student: "A dog from the street",
-      interviewer: {
-        id: 3,
-        name: "Notable Dog Hater, Reggy",
-        avatar: "https://i.imgur.com/FK8V841.jpg"
-      }
-    }
-  }
-];
+import useVisualMode from "hooks/useVisualMode";
+import Form from "components/Appointment/Form";
+import Status from './Status';
 
 
-
-
-
-
+const EMPTY = "EMPTY";
+const SHOW = "SHOW";
+const CREATE = "CREATE"
+const SAVING = "SAVING"
 
 export default function Appointment(props) {
-
+  const { mode, transition, back} = useVisualMode(props.interview ? SHOW : EMPTY);
+  const save = (name, interviewer) => {
+    const interview = {
+      student: name,
+      interviewer
+    };
+    transition(SAVING);
+    props.bookInterview(props.id, interview)
+    .then(() => transition(SHOW));
+  };
+  
   return (
 
     <article className="appointment">
       <Header time={props.time}/>
-      {props.interview ?
-      (<Show
-        student={props.interview.student}
-        interviewer={props.interview.interviewer}
-      />) : <Empty />}
+      {mode === EMPTY && <Empty onAdd={() => transition(CREATE)}/>}
+      {mode === SHOW && (
+        <Show
+          student={props.interview.student}
+          interviewer={props.interview.interviewer}
+        />)}
+      {mode === CREATE && (
+        <Form
+          interviewers={props.interviewers}
+          onSave={save}
+          onCancel={back}
+        />)}
+       {mode === SAVING && <Status message="SAVING"/>}
     </article>
 
   );

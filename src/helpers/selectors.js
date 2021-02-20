@@ -31,3 +31,7 @@ export function getInterviewersForDay(state, day) {
     return [];
   }
 };
+
+export function getDayIndexByAppointment(state, id) {
+  return state.days.findIndex(day => day.appointments.includes(id))
+}

@@ -25,34 +25,41 @@ const useApplicationData = () => {
     
   const setDay = day =>  dispatch({type: SET_DAY, day})
 
-  useEffect(() => {
-    const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
-    console.log(webSocket);
-    webSocket.onopen = () => webSocket.send("ping");
-    webSocket.onmessage = (event) => {
-      console.log(`Message Received: ${event.data}`);
-    }
-
-    return function () { webSocket.close() };
-  }, [])
-
-
-
+  
+  
+  
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
       axios.get('/api/appointments'),
       axios.get('/api/interviewers')
     ]).then((all) => {
-        dispatch({
-          type: SET_APPLICATION_DATA,
-          days: all[0].data,
-          appointments: all[1].data,
-          interviewers: all[2].data 
-        });
+      dispatch({
+        type: SET_APPLICATION_DATA,
+        days: all[0].data,
+        appointments: all[1].data,
+        interviewers: all[2].data 
+      });
     })
   }, []);
   
+  useEffect(() => {
+    const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    webSocket.onmessage = (event) => {
+      const newAppointment = JSON.parse(event.data);
+      if(newAppointment.type === "SET_INTERVIEW") {
+        const appointment = {...state.appointments[newAppointment.id], interview: newAppointment.interview};
+        const appointments = {...state.appointments, [newAppointment.id]: appointment}
+        const dayIndex = getDayIndexByAppointment(state, newAppointment.id);
+        const days = [...state.days];
+        const spotReducer = (acc, id) =>  appointments[id].interview ? acc : acc + 1;
+        days[dayIndex].spots = days[dayIndex].appointments.reduce(spotReducer, 0)
+        dispatch({type: SET_INTERVIEW, appointments, days});
+      }
+    }
+
+    return function () { webSocket.close() };
+  }, [state])
   
   
   const manageInterview = (id, interview = null) => {

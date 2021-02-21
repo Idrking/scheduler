@@ -26,6 +26,19 @@ const useApplicationData = () => {
   const setDay = day =>  dispatch({type: SET_DAY, day})
 
   useEffect(() => {
+    const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    console.log(webSocket);
+    webSocket.onopen = () => webSocket.send("ping");
+    webSocket.onmessage = (event) => {
+      console.log(`Message Received: ${event.data}`);
+    }
+
+    return function () { webSocket.close() };
+  }, [])
+
+
+
+  useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
       axios.get('/api/appointments'),

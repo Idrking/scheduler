@@ -1,27 +1,12 @@
 import {useEffect, useReducer} from "react";
 import axios from "axios";
 import { getDayIndexByAppointment } from "helpers/selectors";
+import reducer, {SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW} from "reducers/application";
 
 const useApplicationData = () => {
 
-  const SET_DAY = "SET_DAY";
-  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-  const SET_INTERVIEW = "SET_INTERVIEW";
   const [state, dispatch] = useReducer(reducer, {days: [], day: "Monday", appointments: {}, interviewers: {}});
 
-  function reducer(state, action) {
-    switch(action.type) {
-      case SET_DAY:
-        return {...state, day: action.day};
-      case SET_APPLICATION_DATA:
-        state = {...state, days: action.days, appointments: action.appointments, interviewers: action.interviewers};
-        return state;
-      case SET_INTERVIEW:
-        return {...state, days: action.days, appointments: action.appointments}
-      default:
-        throw new Error(`Tried to reduce with unsupported action type: ${action.type}`);
-      }
-    }
     
   const setDay = day =>  dispatch({type: SET_DAY, day})
 
@@ -57,9 +42,6 @@ const useApplicationData = () => {
       }
     )
   };
-
-
-
 
 return {state, setDay, manageInterview};
 };

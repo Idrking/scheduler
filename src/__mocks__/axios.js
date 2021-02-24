@@ -33,22 +33,26 @@ const fixtures = {
     "1": {
       id: 1,
       name: "Sylvia Palmer",
-      avatar: "https://i.imgur.com/LpaY82x.png"
+      avatar: "https://i.imgur.com/LpaY82x.png",
+      alt: "Sylvia Palmer"
     },
     "2": {
       id: 2,
       name: "Tori Malcolm",
-      avatar: "https://i.imgur.com/Nmx0Qxo.png"
+      avatar: "https://i.imgur.com/Nmx0Qxo.png",
+      alt: "Tori Malcolm"
     },
     "3": {
       id: 3,
       name: "Mildred Nazir",
-      avatar: "https://i.imgur.com/T2WwVfS.png"
+      avatar: "https://i.imgur.com/T2WwVfS.png",
+      alt: "Mildred Nazir"
     },
     "4": {
       id: 4,
       name: "Cohana Roy",
-      avatar: "https://i.imgur.com/FK8V841.jpg"
+      avatar: "https://i.imgur.com/FK8V841.jpg",
+      alt: "Cohana Roy"
     }
   }
 };
@@ -78,5 +82,17 @@ export default {
         data: fixtures.interviewers
       })
     }
+  }),
+  put: jest.fn(() => {
+    return Promise.resolve({
+      status: 204,
+      statusText: "No content"
+    })
+  }),
+  delete: jest.fn(() => {
+    return Promise.resolve({
+      status: 204,
+      statusText: "No content"
+    })
   })
 }

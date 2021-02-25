@@ -7,9 +7,8 @@ export default function InterviewerListItem(props) {
   const classes = {
     "interviewers__item": true,
     "interviewers__item--selected": props.selected,
-  }
-
-
+  };
+  
   return (
     <li 
       className={classNames(classes)}

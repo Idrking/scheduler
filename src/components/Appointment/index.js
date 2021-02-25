@@ -30,14 +30,14 @@ export default function Appointment(props) {
     };
 
     transition(SAVING);
-    props.bookInterview(props.id, interview)
+    props.manageInterview(props.id, interview)
     .then(() => transition(SHOW))
     .catch(() => transition(ERROR_SAVE, true));
   };
 
   const cancel = () => {
     transition(DELETING, true)
-    props.cancelInterview(props.id)
+    props.manageInterview(props.id)
       .then(() => transition(EMPTY))
       .catch(() => transition(ERROR_DELETE, true))
   }

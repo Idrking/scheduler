@@ -7,11 +7,12 @@ import useApplicationData from "hooks/useApplicationData";
 import "components/Application.scss";
 
 export default function Application(props) {
+  //Set initial state & get the appointments and available interviewers for the day
   const { state, setDay, manageInterview } = useApplicationData();
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const dailyInterviewers = getInterviewersForDay(state, state.day);
 
-  
+  //Renders each appointment
   const appointmentList = dailyAppointments.map(appt => {
     const interview = getInterview(state, appt.interview);
 
@@ -22,8 +23,7 @@ export default function Application(props) {
         time={appt.time}
         interview={interview}
         interviewers={dailyInterviewers}
-        bookInterview={manageInterview}
-        cancelInterview={manageInterview}
+        manageInterview={manageInterview}
       />
     );
   })

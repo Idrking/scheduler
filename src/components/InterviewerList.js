@@ -19,7 +19,6 @@ function InterviewerList(props) {
     );
   });
 
-  
   return (
     
     <section className="interviewers">
@@ -32,6 +31,7 @@ function InterviewerList(props) {
   );
 };
 
+//Used to ensure only arrays have been passed to interviewers
 InterviewerList.propTypes = {
   interviewers: PropTypes.array.isRequired
 };

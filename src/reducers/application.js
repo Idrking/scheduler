@@ -2,7 +2,7 @@
 const reducer = (state, action) => {
 
   const actions = {
-    SET_DAY: {...state, day: action.day},
+    SET_DOOOOAY: {...state, day: action.day},
     SET_APPLICATION_DATA: {...state, days: action.days, appointments: action.appointments, interviewers: action.interviewers},
     SET_INTERVIEW: {...state, days: action.days, appointments: action.appointments}
   };

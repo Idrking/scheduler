@@ -9,7 +9,7 @@ import Status from './Status';
 import Confirm from './Confirm';
 import Error from "./Error"
 
-
+//Constants represent different visual modes
 const EMPTY       = "EMPTY";
 const SHOW        = "SHOW";
 const CREATE      = "CREATE";
@@ -21,6 +21,7 @@ const ERROR_SAVE  = "ERROR_SAVE"
 const ERROR_DELETE= "ERROR_DELETE"
 
 export default function Appointment(props) {
+  //Initial state, and two functions for transitioning through visual modes
   const { mode, transition, back} = useVisualMode(props.interview ? SHOW : EMPTY);
   
   const save = (name, interviewer) => {

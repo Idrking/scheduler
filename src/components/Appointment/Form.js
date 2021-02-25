@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
+import reducer, {SET_NAME, SET_ERROR, SET_INTERVIEWER} from "reducers/form";
 
 
 export default function Form(props) {
-  
+  const [state, dispatch] = useReducer(reducer, {
+    name: props.name || "",
+    interviewer: props.interviewer || null,
+    error: ""
+  })
   //TODO refactor into single state object
-  const [name, setName] = useState(props.name || '');
-  const [interviewer, setInterviewer] = useState(props.interviewer || null);
-  const [error, setError] = useState("");
+  // const [name, setName] = useState(props.name || '');
+  // const [interviewer, setInterviewer] = useState(props.interviewer || null);
+  // const [error, setError] = useState("");
 
   const reset = () => {
-    setName('');
-    setInterviewer(null);
+    dispatch({type: SET_NAME, name: ""});
+    dispatch({type: SET_INTERVIEWER, interviewer: null});
   }
 
   const cancel = () => {
@@ -21,13 +26,13 @@ export default function Form(props) {
   }
 
   const validate = () => {
-    if (name === "") {
-      setError("Student name cannot be blank");
+    if (state.name === "") {
+      dispatch({type: SET_ERROR, error: "Student name cannot be blank"});
       return;
     }
 
-    setError("")
-    props.onSave(name, interviewer);
+    dispatch({type: SET_ERROR, error: ""});
+    props.onSave(state.name, state.interviewer);
   }
 
   return (
@@ -41,15 +46,19 @@ export default function Form(props) {
             type="text"
             placeholder="Enter Student Name"
             data-testid="student-name-input"
-            value={name}
-            onChange={event => setName(event.target.value)}
+            value={state.name}
+            onChange={event => dispatch(
+              {
+                type: SET_NAME,
+                name: event.target.value
+              })}
           />
-          {error && <section className="appointment__validation">{error}</section>}
+          {state.error && <section className="appointment__validation">{state.error}</section>}
         </form>
         <InterviewerList
           interviewers={props.interviewers}
-          value={interviewer}
-          onChange={setInterviewer}
+          value={state.interviewer}
+          onChange={dispatch}
         />
       </section>
       <section className="appointment__card-right">

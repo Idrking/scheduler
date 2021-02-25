@@ -14,7 +14,7 @@ const useVisualMode = function(initial) {
   const back = () => {
     setHistory(prev => {
       return prev.length > 1 ? [...prev.slice(1)] : [...prev];
-    })
+    });
   };
 
   const mode = history[0];

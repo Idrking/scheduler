@@ -9,7 +9,7 @@ import Status from './Status';
 import Confirm from './Confirm';
 import Error from "./Error"
 
-
+//Constants represent different visual modes
 const EMPTY       = "EMPTY";
 const SHOW        = "SHOW";
 const CREATE      = "CREATE";
@@ -21,6 +21,7 @@ const ERROR_SAVE  = "ERROR_SAVE"
 const ERROR_DELETE= "ERROR_DELETE"
 
 export default function Appointment(props) {
+  //Initial state, and two functions for transitioning through visual modes
   const { mode, transition, back} = useVisualMode(props.interview ? SHOW : EMPTY);
   
   const save = (name, interviewer) => {
@@ -30,14 +31,14 @@ export default function Appointment(props) {
     };
 
     transition(SAVING);
-    props.bookInterview(props.id, interview)
+    props.manageInterview(props.id, interview)
     .then(() => transition(SHOW))
     .catch(() => transition(ERROR_SAVE, true));
   };
 
   const cancel = () => {
     transition(DELETING, true)
-    props.cancelInterview(props.id)
+    props.manageInterview(props.id)
       .then(() => transition(EMPTY))
       .catch(() => transition(ERROR_DELETE, true))
   }
@@ -54,7 +55,7 @@ export default function Appointment(props) {
   
   return (
 
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <Header time={props.time}/>
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)}/>}
       {mode === SHOW && props.interview && (

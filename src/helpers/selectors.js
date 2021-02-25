@@ -1,6 +1,9 @@
 
+//Selectors for use throughout application
+//Ensure these do not mutate state
+
 export function getAppointmentsForDay(state, day) {
-  const matchedDay = state.days.filter(ele => ele.name === day ? true : false)[0];
+  const matchedDay = state.days.find(ele => ele.name === day ? true : false);
   if (matchedDay) {
     return [...matchedDay.appointments].map(id => {
       return {...state.appointments[id]};
@@ -9,6 +12,7 @@ export function getAppointmentsForDay(state, day) {
     return [];
   }
 };
+
 
 export function getInterview(state, interview) {
   if(!interview) {
@@ -22,7 +26,7 @@ export function getInterview(state, interview) {
 };
 
 export function getInterviewersForDay(state, day) {
-  const matchedDay = state.days.filter(ele => ele.name === day ? true : false)[0];
+  const matchedDay = state.days.find(ele => ele.name === day ? true : false);
   if (matchedDay) {
     return [...matchedDay.interviewers].map(id => {
       return {...state.interviewers[id]};

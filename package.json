@@ -17,7 +17,7 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public --ci",
     "build-storybook": "build-storybook -s public",
-    "proxy": "http://localhost:8001"
+    "cypress": "cypress open -P ."
   },
   "browserslist": {
     "production": [
@@ -42,6 +42,7 @@
     "@testing-library/react": "^8.0.7",
     "babel-loader": "^8.0.5",
     "node-sass": "^4.14.0",
+    "prop-types": "^15.7.2",
     "react-hooks-testing-library": "^0.6.0",
     "react-test-renderer": "^16.9.0"
   },
@@ -49,6 +50,10 @@
     "watchPathIgnorePatterns": [
       "<rootDir>/node_modules/",
       "<rootDir>/.git/"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/index.js"
     ]
   },
   "proxy": "http://localhost:8001"

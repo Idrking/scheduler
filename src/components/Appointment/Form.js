@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer } from 'react';
 import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
 import reducer, {SET_NAME, SET_ERROR, SET_INTERVIEWER} from "reducers/form";

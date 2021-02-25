@@ -1,4 +1,4 @@
-import {useEffect, useReducer} from "react";
+import {useEffect, useReducer, useRef} from "react";
 import axios from "axios";
 import { getDayIndexByAppointment } from "helpers/selectors";
 import reducer, {SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW} from "reducers/application";
@@ -6,6 +6,8 @@ import reducer, {SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW} from "reducers/ap
 const useApplicationData = () => {
   //State
   const [state, dispatch] = useReducer(reducer, {days: [], day: "Monday", appointments: {}, interviewers: {}});
+  const currentState = useRef();
+  currentState.current = state;
 
   //Helper Functions
   const setDay = day =>  dispatch({type: SET_DAY, day});
@@ -32,16 +34,18 @@ const useApplicationData = () => {
         });
     });
   }, []);
-  
+
+
+  //listens for incoming messages on a WebSocket connection to indicate another client has booked an appointment, and updates the view
   useEffect(() => {
     const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
     webSocket.onmessage = (event) => {
       const newAppointment = JSON.parse(event.data);
       if(newAppointment.type === "SET_INTERVIEW") {
-        const appointment = {...state.appointments[newAppointment.id], interview: newAppointment.interview};
-        const appointments = {...state.appointments, [newAppointment.id]: appointment}
-        const dayIndex = getDayIndexByAppointment(state, newAppointment.id);
-        const days = [...state.days];
+        const appointment = {...currentState.current.appointments[newAppointment.id], interview: newAppointment.interview};
+        const appointments = {...currentState.current.appointments, [newAppointment.id]: appointment}
+        const dayIndex = getDayIndexByAppointment(currentState.current, newAppointment.id);
+        const days = [...currentState.current.days];
         const spotReducer = (acc, id) =>  appointments[id].interview ? acc : acc + 1;
         days[dayIndex].spots = days[dayIndex].appointments.reduce(spotReducer, 0)
         dispatch({type: SET_INTERVIEW, appointments, days});
@@ -49,7 +53,7 @@ const useApplicationData = () => {
     }
 
     return function () { webSocket.close() };
-  }, [state])
+  }, [])
   
   // Called whenever a user adds, deletes or edits an appointment
   const manageInterview = (id, interview = null) => {

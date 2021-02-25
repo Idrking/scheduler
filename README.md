@@ -45,3 +45,11 @@ npm test
 ```sh
 npm run storybook
 ```
+
+## Screenshots
+
+### Main List of Appointments
+!["Main List of apppointments"](https://github.com/Idrking/scheduler/blob/master/docs/Initial.png?raw=true)
+
+### Appointment Creation Component
+!["appointment creation component](https://github.com/Idrking/scheduler/blob/master/docs/Booking.png?raw=true)

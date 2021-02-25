@@ -9,21 +9,18 @@ export default function Form(props) {
     name: props.name || "",
     interviewer: props.interviewer || null,
     error: ""
-  })
-  //TODO refactor into single state object
-  // const [name, setName] = useState(props.name || '');
-  // const [interviewer, setInterviewer] = useState(props.interviewer || null);
-  // const [error, setError] = useState("");
+  });
+
 
   const reset = () => {
     dispatch({type: SET_NAME, name: ""});
     dispatch({type: SET_INTERVIEWER, interviewer: null});
-  }
+  };
 
   const cancel = () => {
     reset();
     props.onCancel();
-  }
+  };
 
   const validate = () => {
     if (state.name === "") {
@@ -33,7 +30,7 @@ export default function Form(props) {
 
     dispatch({type: SET_ERROR, error: ""});
     props.onSave(state.name, state.interviewer);
-  }
+  };
 
   return (
 
